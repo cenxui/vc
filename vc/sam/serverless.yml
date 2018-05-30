@@ -1,4 +1,4 @@
-service: api
+service: sam
 
 provider:
   name: aws
