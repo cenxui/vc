@@ -25,19 +25,25 @@ package:
 
 functions:
   cameraGet:
-    handler: bin/cameraGet
+    handler: bin/camera/get
     events:
       - http:
           path: camera/{mac}
           method: get
+  cameraGetAll:
+    handler: bin/camera/getAll
+    events:
+      - http:
+          path: camera
+          method: get
   cameraPost:
-    handler: bin/cameraPost
+    handler: bin/camera/post
     events:
       - http:
           path: camera
           method: post
   monitorGet:
-    handler: bin/monitorGet
+    handler: bin/monitor/get
     events:
       - http:
           path: monitor
@@ -51,14 +57,14 @@ resources:
       Properties:
         AttributeDefinitions:
           -
-            AttributeName: "mac"
+            AttributeName: "Mac"
             AttributeType: "S"
         KeySchema:
           -
-            AttributeName: "mac"
+            AttributeName: "Mac"
             KeyType: "HASH"
 
         ProvisionedThroughput:
           ReadCapacityUnits: "1"
           WriteCapacityUnits: "1"
-        TableName: "camera"
+        TableName: "Camera"

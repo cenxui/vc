@@ -10,8 +10,8 @@ import (
 )
 
 type Camera struct {
-	MAC string `json:"mac"`
-	Camera string `json:"camera"`
+	Mac string
+	Camera string
 }
 
 var svc *dynamodb.DynamoDB
@@ -34,7 +34,7 @@ func Put(item *Camera) error {
 
 	input := &dynamodb.PutItemInput{
 		Item: av,
-		TableName: aws.String("camera"),
+		TableName: aws.String("Camera"),
 	}
 	_, err = svc.PutItem(input)
 
@@ -43,9 +43,9 @@ func Put(item *Camera) error {
 
 func Query(mac string) (*Camera, error) {
 	result, err := svc.GetItem(&dynamodb.GetItemInput{
-		TableName: aws.String("camera"),
+		TableName: aws.String("Camera"),
 		Key: map[string]*dynamodb.AttributeValue{
-			"mac": {
+			"Mac": {
 				S: aws.String(mac),
 			},
 		},
@@ -63,8 +63,28 @@ func Query(mac string) (*Camera, error) {
 		return nil, err
 	}
 
-	if item.MAC == "" {
+	if item.Mac == "" {
 		return nil, errors.New("Item not found")
 	}
 	return &item, nil
+}
+
+func Scan() ([]Camera, error){
+	var list []Camera
+
+	result, error :=svc.Scan(&dynamodb.ScanInput{
+		TableName: aws.String("Camera"),
+	})
+
+	if error != nil {
+		return nil, error
+	}
+
+	for _, v := range result.Items {
+		item := Camera{}
+		//todo error
+		dynamodbattribute.UnmarshalMap(v, &item)
+		list = append(list, item)
+	}
+	return list, nil
 }

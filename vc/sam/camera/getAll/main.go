@@ -1,26 +1,26 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"logitech.com/vc/lib/repository"
+	"fmt"
 )
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
-	c := new(repository.Camera)
-	err:= json.Unmarshal([]byte(request.Body), c)
+
+	r, err := repository.Scan()
 
 	if err != nil {
-		panic(err)
 		fmt.Println(err.Error())
-		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 200}, nil
+		return events.APIGatewayProxyResponse{Body: "error", StatusCode: 200}, nil
 	}
 
-	repository.Put(c);
+	j, _ := json.Marshal(r)
 
-	return events.APIGatewayProxyResponse{Body: "mac :" + c.Mac + "camera :" + c.Camera  , StatusCode: 200}, nil
+
+	return events.APIGatewayProxyResponse{Body: string(j), StatusCode: 200}, nil
 }
 
 func main() {
