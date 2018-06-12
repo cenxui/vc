@@ -8,7 +8,7 @@ import (
 )
 
 func TestScan(t *testing.T) {
-	r := repository.Scan();
+	r, _ := repository.Scan();
 	j, _ := json.Marshal(r)
 	fmt.Println(string(j))
 }

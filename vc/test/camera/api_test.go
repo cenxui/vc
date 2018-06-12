@@ -32,3 +32,23 @@ func TestPost(t *testing.T) {
 	body, _ := ioutil.ReadAll(resp.Body)
 	fmt.Println(string(body))
 }
+
+func TestGetAll(t *testing.T) {
+
+	req, _ :=
+		http.NewRequest(
+			"GET",
+			"https://uyhelatdx1.execute-api.ap-northeast-1.amazonaws.com/dev/camera",
+			nil)
+
+	c := http.DefaultClient;
+
+	resp, err := c.Do(req)
+	if err != nil {
+		t.Log(err.Error())
+	}
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	t.Log(string(body))
+}
+

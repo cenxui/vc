@@ -1,4 +1,4 @@
-service: sam
+service: camera-iot
 
 provider:
   name: aws
@@ -16,7 +16,6 @@ provider:
       - dynamodb:UpdateItem
       - dynamodb:DeleteItem
     Resource: "arn:aws:dynamodb:ap-northeast-1:*:*"
-
 package:
  exclude:
    - ./**
@@ -30,23 +29,33 @@ functions:
       - http:
           path: camera/{mac}
           method: get
-  cameraGetAll:
-    handler: bin/camera/getAll
+
+  cameraPut:
+    handler: bin/camera/put
     events:
       - http:
           path: camera
-          method: get
+          method: put
+
   cameraPost:
     handler: bin/camera/post
     events:
       - http:
           path: camera
           method: post
-  monitorGet:
-    handler: bin/monitor/get
+
+  cameraDelete:
+      handler: bin/camera/delete
+      events:
+        - http:
+            path: camera
+            method: delete
+
+  cameraGetAll:
+    handler: bin/camera/getAll
     events:
       - http:
-          path: monitor
+          path: camera
           method: get
 
 # AWS CloudFormation templates
